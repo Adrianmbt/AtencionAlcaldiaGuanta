@@ -1,0 +1,464 @@
+{% extends "base.html" %}
+
+{% block title %}Casos - Atención Ciudadana{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navstyles.css') }}">
+<style>
+    .table-section {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .btn-action {
+        margin: 0 3px;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-group {
+        white-space: nowrap;
+    }
+    .alert {
+        margin-bottom: 15px;
+    }
+    .form-section {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .section-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 5px;
+    }
+    .badge-remitido {
+        background-color: #17a2b8 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Reemplazar la sección de la navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-guanta">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='img/logo.webp') }}" alt="Logo Guanta">
+            Alcaldía de Guanta
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('ciudadano') }}">Ciudadanos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ url_for('casos') }}">Casos</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <span class="text-white me-4 mt-2">Bienvenido, {{ session['nombre'] }} ({{ session['rol'] }})</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Gestión de Casos Ciudadanos</h1>
+    
+    <!-- Botón para abrir modal de agregar caso -->
+    <div class="mb-5">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#casoModal">
+            <i class="fas fa-plus"></i> Agregar Nuevo Caso
+        </button>
+    </div>
+
+    <!-- Modal para agregar/editar caso -->
+    <div class="modal fade" id="casoModal" tabindex="-1" aria-labelledby="casoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="casoModalLabel">Agregar Nuevo Caso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('casos') }}" id="formCaso">
+                        <input type="hidden" id="casoId" name="id" value="">
+                        
+                        <!-- Sección: Información del Ciudadano -->
+                        <div class="form-section">
+                            <h6 class="section-title"><i class="fas fa-user"></i> Información del Ciudadano</h6>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="idP" class="form-label">Ciudadano *</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="buscarCiudadano" placeholder="Buscar por nombre o cédula..." aria-label="Buscar ciudadano">
+                                        <select class="form-select" id="idP" name="idP" required>
+                                            <option value="">Seleccione un ciudadano</option>
+                                            {% for ciudadano in ciudadanos %}
+                                            <option value="{{ ciudadano.id }}" data-nombre="{{ ciudadano.nombre }}" data-cedula="{{ ciudadano.cedula }}" data-comuna="{{ ciudadano.comuna }}" {% if request.args.get('idP') == ciudadano.id|string %}selected{% endif %}>
+                                                {{ ciudadano.nombre }} - {{ ciudadano.cedula }} - {{ ciudadano.comuna }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Clasificación del Caso -->
+                        <div class="form-section">
+                            <h6 class="section-title"><i class="fas fa-clipboard-list"></i> Clasificación del Caso</h6>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="motivo_caso" class="form-label">Motivo del Caso *</label>
+                                    <select class="form-select" id="motivo_caso" name="motivo_caso" required>
+                                        <option value="">Seleccione el motivo</option>
+                                        <option value="Ayudas Sociales">Ayudas Sociales</option>
+                                        <option value="Ayudas Económicas">Ayudas Económicas</option>
+                                        <option value="Ayudas Técnicas (Médicas)">Ayudas Técnicas (Médicas)</option>
+                                        <option value="Solicitud de Medicinas">Solicitud de Medicinas</option>
+                                        <option value="Quejas, Sugerencias y/o Denuncias">Quejas, Sugerencias y/o Denuncias</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="especificacion_caso" class="form-label">Especificación del Caso *</label>
+                                    <input type="text" class="form-control" id="especificacion_caso" name="especificacion_caso" 
+                                           placeholder="Ej: Tanques de agua, Medicamentos, etc." required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Detalles Económicos y Estado -->
+                        <div class="form-section">
+                            <h6 class="section-title"><i class="fas fa-dollar-sign"></i> Inversión Social y Estado</h6>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="valor_inversion_social" class="form-label">Valor de la Inversión Social</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" step="0.01" class="form-control" id="valor_inversion_social" 
+                                               name="valor_inversion_social" placeholder="0.00">
+                                    </div>
+                                    <small class="form-text text-muted">Dejar en 0 si no aplica inversión monetaria</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="estado" class="form-label">Estado del Caso *</label>
+                                    <select class="form-select" id="estado" name="estado" required>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="En Proceso">En Proceso</option>
+                                        <option value="Aprobado">Aprobado</option>
+                                        <option value="Entregado">Entregado</option>
+                                        <option value="Rechazado">Rechazado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Descripción del Caso -->
+                        <div class="form-section">
+                            <h6 class="section-title"><i class="fas fa-file-alt"></i> Descripción del Caso</h6>
+                            <div class="mb-3">
+                                <label for="descayuda" class="form-label">Descripción Detallada *</label>
+                                <textarea class="form-control" id="descayuda" name="descayuda" rows="4" 
+                                          placeholder="Describa detalladamente la situación, necesidades específicas y cualquier información relevante..." required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarCaso">
+                                <i class="fas fa-save"></i> Registrar Caso
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para remitir caso -->
+    <div class="modal fade" id="remitirModal" tabindex="-1" aria-labelledby="remitirModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="remitirModalLabel">Remitir Caso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('remitir_caso') }}" id="formRemitir">
+                        <input type="hidden" id="remitirCasoId" name="caso_id" value="">
+                        
+                        <div class="mb-3">
+                            <label for="entidad_remision" class="form-label">Entidad de Remisión *</label>
+                            <select class="form-select" id="entidad_remision" name="entidad_remision" required>
+                                <option value="">Seleccione la entidad</option>
+                                <option value="FONDEGUNATA">FONDEGUNATA</option>
+                                <option value="Secretaría de Salud">Secretaría de Salud</option>
+                                <option value="Secretaría de Desarrollo Social">Secretaría de Desarrollo Social</option>
+                                <option value="Secretaría de Educación">Secretaría de Educación</option>
+                                <option value="Defensoría del Pueblo">Defensoría del Pueblo</option>
+                                <option value="Personería Municipal">Personería Municipal</option>
+                                <option value="Otra Entidad">Otra Entidad</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3" id="otraEntidadDiv" style="display: none;">
+                            <label for="otra_entidad" class="form-label">Especifique la Entidad</label>
+                            <input type="text" class="form-control" id="otra_entidad" name="otra_entidad" 
+                                   placeholder="Nombre de la entidad">
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-share"></i> Remitir Caso
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Listado de casos -->
+    <div class="table-section">
+        <h2 class="mb-3">Listado de Casos</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" id="tablaCasos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ciudadano</th>
+                        <th>Cédula</th>
+                        <th>Motivo</th>
+                        <th>Especificación</th>
+                        <th>Inversión Social</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Estado</th>
+                        <th>Remitido</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for caso in ayudas %}
+                    <tr>
+                        <td>{{ caso.id }}</td>
+                        <td>{{ caso.nombre_persona }}</td>
+                        <td>{{ caso.cedula_persona }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ caso.motivo_caso or caso.tpayuda }}</span>
+                        </td>
+                        <td>{{ caso.especificacion_caso or caso.tpayuda }}</td>
+                        <td>${{ "%.2f"|format(caso.valor_inversion_social or caso.valayuda or 0) }}</td>
+                        <td>{{ caso.FechaSolicitud }}</td>
+                        <td>
+                            <span class="badge {% if caso.estado == 'Entregado' %}bg-success{% elif caso.estado == 'Aprobado' %}bg-primary{% elif caso.estado == 'En Proceso' %}bg-warning{% elif caso.estado == 'Rechazado' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                {{ caso.estado }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if caso.remitido == 'Sí' %}
+                                <span class="badge badge-remitido">Remitido</span>
+                            {% else %}
+                                <span class="badge bg-light text-dark">No</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-primary btn-action editar-caso" 
+                                        data-id="{{ caso.id }}" 
+                                        data-idp="{{ caso.idP }}" 
+                                        data-motivo="{{ caso.motivo_caso or caso.tpayuda }}"
+                                        data-especificacion="{{ caso.especificacion_caso or caso.tpayuda }}" 
+                                        data-valor="{{ caso.valor_inversion_social or caso.valayuda }}" 
+                                        data-estado="{{ caso.estado }}" 
+                                        data-descayuda="{{ caso.descayuda }}" 
+                                        title="Editar caso">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <a href="{{ url_for('eliminar_caso', id=caso.id) }}" 
+                                   class="btn btn-danger btn-action" 
+                                   onclick="return confirm('¿Está seguro de eliminar este caso?');" 
+                                   title="Eliminar caso">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                <button type="button" class="btn btn-info btn-action generar-pdf" 
+                                        data-id="{{ caso.id }}" 
+                                        title="Generar reporte PDF">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                                {% if caso.estado != 'Aprobado' and caso.estado != 'Entregado' %}
+                                <button type="button" class="btn btn-success btn-action aprobar-recurso" 
+                                        data-id="{{ caso.id }}" 
+                                        title="Aprobar recursos">
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                                {% endif %}
+                                {% if caso.remitido != 'Sí' %}
+                                <button type="button" class="btn btn-warning btn-action remitir-caso" 
+                                        data-id="{{ caso.id }}" 
+                                        title="Remitir caso">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/casos.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar modal automáticamente si hay un ciudadano seleccionado
+    const urlParams = new URLSearchParams(window.location.search);
+    const showModal = urlParams.get('show_modal');
+    const successMessage = urlParams.get('success');
+    
+    if (successMessage) {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: decodeURIComponent(successMessage),
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+    
+    if (showModal === 'true') {
+        const modal = new bootstrap.Modal(document.getElementById('casoModal'));
+        modal.show();
+    }
+
+    // Manejar edición de casos
+    document.querySelectorAll('.editar-caso').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const idp = this.dataset.idp;
+            const motivo = this.dataset.motivo;
+            const especificacion = this.dataset.especificacion;
+            const valor = this.dataset.valor;
+            const estado = this.dataset.estado;
+            const descayuda = this.dataset.descayuda;
+            
+            document.getElementById('casoId').value = id;
+            document.getElementById('idP').value = idp;
+            document.getElementById('motivo_caso').value = motivo;
+            document.getElementById('especificacion_caso').value = especificacion;
+            document.getElementById('valor_inversion_social').value = valor;
+            document.getElementById('estado').value = estado;
+            document.getElementById('descayuda').value = descayuda;
+            
+            document.getElementById('casoModalLabel').textContent = 'Editar Caso';
+            document.getElementById('btnGuardarCaso').innerHTML = '<i class="fas fa-save"></i> Actualizar Caso';
+            
+            const modal = new bootstrap.Modal(document.getElementById('casoModal'));
+            modal.show();
+        });
+    });
+
+    // Manejar remisión de casos
+    document.querySelectorAll('.remitir-caso').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            document.getElementById('remitirCasoId').value = id;
+            
+            const modal = new bootstrap.Modal(document.getElementById('remitirModal'));
+            modal.show();
+        });
+    });
+
+    // Mostrar/ocultar campo "Otra Entidad"
+    document.getElementById('entidad_remision').addEventListener('change', function() {
+        const otraEntidadDiv = document.getElementById('otraEntidadDiv');
+        if (this.value === 'Otra Entidad') {
+            otraEntidadDiv.style.display = 'block';
+            document.getElementById('otra_entidad').required = true;
+        } else {
+            otraEntidadDiv.style.display = 'none';
+            document.getElementById('otra_entidad').required = false;
+        }
+    });
+
+    // Limpiar formulario al cerrar modal
+    document.getElementById('casoModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('formCaso').reset();
+        document.getElementById('casoId').value = '';
+        document.getElementById('casoModalLabel').textContent = 'Agregar Nuevo Caso';
+        document.getElementById('btnGuardarCaso').innerHTML = '<i class="fas fa-save"></i> Registrar Caso';
+    });
+
+    // Manejar aprobación de recursos
+    document.querySelectorAll('.aprobar-recurso').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            
+            Swal.fire({
+                title: '¿Aprobar recursos?',
+                text: '¿Está seguro de aprobar los recursos para este caso?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, aprobar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/aprobar_caso/${id}`;
+                }
+            });
+        });
+    });
+
+    // Manejar generación de PDF
+    document.querySelectorAll('.generar-pdf').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            
+            Swal.fire({
+                title: 'Generando PDF...',
+                text: 'Por favor espere mientras se genera el reporte',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Simular generación de PDF (aquí iría la lógica real)
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'PDF Generado',
+                    text: 'El reporte se ha generado exitosamente',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }, 2000);
+        });
+    });
+});
+</script>
+{% endblock %}

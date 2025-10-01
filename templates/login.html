@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio de Sesión - Alcaldía de Guanta{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<style>
+    .card-header-with-logo {
+        position: relative;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .header-logo {
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        left: 15px;
+    }
+    .login-card {
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(15px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="container login-container">
+        
+        <div class="card login-card">
+            <div class="card-header bg-guanta text-white text-center card-header-with-logo">
+                <img src="{{ url_for('static', filename='img/logo.webp') }}" alt="Logo Guanta" class="header-logo"><br>
+                <h3>Sistema de Atención Ciudadana</h3>
+            </div>
+            <div class="card-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-guanta text-white" style="background-color: #e85d45;">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}
