@@ -61,6 +61,7 @@ def login():
 
 @app.route('/auth/login', methods=['POST'])
 def auth_login():
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     try:
         usuario = request.form['usuario']
         clave = request.form['clave']
@@ -76,13 +77,19 @@ def auth_login():
             session['usuario'] = user['usuario']
             session['nombre'] = user['nombre']
             session['rol'] = user['rol']
+            if is_ajax:
+                return jsonify({'success': True, 'redirect': url_for('dashboard')})
             return redirect(url_for('dashboard'))
         else:
             error_message = "Usuario o contraseña incorrectos"
+            if is_ajax:
+                return jsonify({'success': False, 'error_message': error_message}), 401
             return render_template('login.html', error_message=error_message)
     except Exception as e:
         logging.error(f'Error en login: {str(e)}')
         error_message = "Ha ocurrido un error en el sistema"
+        if is_ajax:
+            return jsonify({'success': False, 'error_message': error_message}), 500
         return render_template('login.html', error_message=error_message)
 
 @app.route('/logout')
