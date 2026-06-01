@@ -19,6 +19,10 @@ os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Configurar sesiones para producción en Render (sin sistema de archivos)
+if os.environ.get('RENDER'):
+    app.config['SESSION_TYPE'] = 'signed_cookie'
+
 # Configurar logging: en producción (Render) usa stdout; en local, archivo
 if os.environ.get('RENDER'):
     logging.basicConfig(
