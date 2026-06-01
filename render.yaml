@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: atencion-alcaldia-guanta
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python init_db.py
+    startCommand: gunicorn wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: RENDER
+        value: "true"
+      - key: PYTHON_VERSION
+        value: 3.11.0
+    disk:
+      name: sqlite-data
+      mountPath: /var/data
+      sizeGB: 1

@@ -9,27 +9,36 @@ import logging
 import sqlite3
 from datetime import datetime, timedelta
 
-# Crear directorios necesarios
-if not os.path.exists('flask_session'):
-    os.makedirs('flask_session')
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+if os.environ.get('RENDER'):
+    DB_PATH = '/var/data/alc.db'
+else:
+    DB_PATH = os.path.join(BASE_DIR, 'alc.db')
 
-if not os.path.exists('logs'):
-    os.makedirs('logs')
+# Crear directorios necesarios usando rutas absolutas
+os.makedirs(os.path.join(BASE_DIR, 'flask_session'), exist_ok=True)
+os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
 app = Flask(__name__)
 app.config.from_object(Config)
 Session(app)
 
-# Configurar logging
-logging.basicConfig(
-    filename='logs/auth_errors.log',
-    level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+# Configurar logging: en producción (Render) usa stdout; en local, archivo
+if os.environ.get('RENDER'):
+    logging.basicConfig(
+        level=logging.ERROR,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+else:
+    logging.basicConfig(
+        filename=os.path.join(BASE_DIR, 'logs', 'auth_errors.log'),
+        level=logging.ERROR,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
 
 # Función para obtener conexión a SQLite
 def get_db_connection():
-    conn = sqlite3.connect('alc.db')
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 

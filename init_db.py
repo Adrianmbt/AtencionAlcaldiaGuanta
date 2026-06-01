@@ -1,22 +1,30 @@
 import sqlite3
 import os
 
-def init_db():
-    """Inicializar la base de datos SQLite con la estructura original"""
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+if os.environ.get('RENDER'):
+    DB_PATH = '/var/data/alc.db'
+else:
+    DB_PATH = os.path.join(BASE_DIR, 'alc.db')
+
+def init_db(force=False):
+    """Inicializar la base de datos SQLite con la estructura original.
     
-    # Verificar si la base de datos ya existe
-    if os.path.exists('alc.db'):
-        print("La base de datos ya existe. ¿Desea borrarla y recrearla? (sí/no)")
-        respuesta = input().lower()
-        if respuesta != 'sí' and respuesta != 'si':
-            print("Operación cancelada.")
+    Args:
+        force: Si True, elimina la DB existente y la recrea (útil en CI/build).
+               Si False y la DB existe, no hace nada.
+    """
+    if os.path.exists(DB_PATH):
+        if force:
+            os.remove(DB_PATH)
+            print("Base de datos existente eliminada.")
+        else:
+            print("La base de datos ya existe. Use force=True para recrearla.")
             return
-        os.remove('alc.db')
-        print("Base de datos existente eliminada.")
-    
-    conn = sqlite3.connect('alc.db')
+
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    
+
     # Crear tabla de usuarios
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuarios (
@@ -28,7 +36,7 @@ def init_db():
             rol VARCHAR(60) NOT NULL
         )
     ''')
-    
+
     # Crear tabla de persona
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS persona (
@@ -40,7 +48,7 @@ def init_db():
             comuna VARCHAR(200) NOT NULL
         )
     ''')
-    
+
     # Crear tabla de ayudas
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ayudas (
@@ -63,20 +71,23 @@ def init_db():
             FOREIGN KEY (idUs) REFERENCES usuarios(id)
         )
     ''')
-    
+
     conn.commit()
-    
+
     # Insertar usuario por defecto
     cursor.execute('''
         INSERT OR IGNORE INTO usuarios (id, usuario, clave, nombre, cedula, rol) 
         VALUES (1, 'Adrianmbt', 'adrianmbt1', 'Adrian M. Bello', '19674244', 'Administrador')
     ''')
-    
+
     conn.commit()
     conn.close()
-    
+
     print("Base de datos inicializada correctamente.")
+    print(f"Archivo: {DB_PATH}")
     print("Usuario por defecto: Adrianmbt / adrianmbt1")
 
 if __name__ == '__main__':
-    init_db()
+    # Cuando se ejecuta directamente (ej: build command de Render),
+    # crea la DB si no existe. No destruye datos existentes.
+    init_db(force=False)
