@@ -2,10 +2,25 @@ import sqlite3
 import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-if os.environ.get('RENDER'):
-    DB_PATH = '/var/data/alc.db'
-else:
-    DB_PATH = os.path.join(BASE_DIR, 'alc.db')
+
+def get_db_path():
+    if os.environ.get('RENDER'):
+        db_path = '/var/data/alc.db'
+        try:
+            db_dir = os.path.dirname(db_path)
+            os.makedirs(db_dir, exist_ok=True)
+            # Test write
+            test_file = os.path.join(db_dir, '.write_test')
+            with open(test_file, 'w') as f:
+                f.write('1')
+            os.remove(test_file)
+            return db_path
+        except Exception:
+            print("AVISO: No se pudo escribir en /var/data. Usando base de datos local en el workspace.")
+            return os.path.join(BASE_DIR, 'alc.db')
+    return os.path.join(BASE_DIR, 'alc.db')
+
+DB_PATH = get_db_path()
 
 def init_db(force=False):
     """Inicializar la base de datos SQLite con la estructura original.
@@ -16,7 +31,10 @@ def init_db(force=False):
     """
     db_dir = os.path.dirname(DB_PATH)
     if db_dir:
-        os.makedirs(db_dir, exist_ok=True)
+        try:
+            os.makedirs(db_dir, exist_ok=True)
+        except Exception:
+            pass
 
     if os.path.exists(DB_PATH):
         if force:
