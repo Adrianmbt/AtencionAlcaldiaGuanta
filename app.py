@@ -7,12 +7,16 @@ import os
 import logging
 import sqlite3
 from datetime import datetime, timedelta
+from init_db import init_db
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 if os.environ.get('RENDER'):
     DB_PATH = '/var/data/alc.db'
 else:
     DB_PATH = os.path.join(BASE_DIR, 'alc.db')
+
+# Inicializar base de datos si no existe
+init_db(force=False)
 
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 

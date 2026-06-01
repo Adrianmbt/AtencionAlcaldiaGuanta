@@ -14,10 +14,17 @@ def init_db(force=False):
         force: Si True, elimina la DB existente y la recrea (útil en CI/build).
                Si False y la DB existe, no hace nada.
     """
+    db_dir = os.path.dirname(DB_PATH)
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
+
     if os.path.exists(DB_PATH):
         if force:
-            os.remove(DB_PATH)
-            print("Base de datos existente eliminada.")
+            try:
+                os.remove(DB_PATH)
+                print("Base de datos existente eliminada.")
+            except Exception as e:
+                print(f"No se pudo eliminar la base de datos: {e}")
         else:
             print("La base de datos ya existe. Use force=True para recrearla.")
             return
