@@ -1,5 +1,4 @@
 from flask import Flask, session, redirect, url_for, request, render_template, jsonify
-from flask_session import Session
 from config import Config
 from models.usuario import Usuario
 from models.persona import Persona
@@ -15,16 +14,10 @@ if os.environ.get('RENDER'):
 else:
     DB_PATH = os.path.join(BASE_DIR, 'alc.db')
 
-# Crear directorios necesarios
-if os.environ.get('RENDER'):
-    os.makedirs('/var/data/flask_session', exist_ok=True)
-else:
-    os.makedirs(os.path.join(BASE_DIR, 'flask_session'), exist_ok=True)
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
 app = Flask(__name__)
 app.config.from_object(Config)
-Session(app)
 
 # Configurar logging: en producción (Render) usa stdout; en local, archivo
 if os.environ.get('RENDER'):
