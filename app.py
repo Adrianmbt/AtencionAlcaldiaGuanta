@@ -15,8 +15,11 @@ if os.environ.get('RENDER'):
 else:
     DB_PATH = os.path.join(BASE_DIR, 'alc.db')
 
-# Crear directorios necesarios usando rutas absolutas
-os.makedirs(os.path.join(BASE_DIR, 'flask_session'), exist_ok=True)
+# Crear directorios necesarios
+if os.environ.get('RENDER'):
+    os.makedirs('/var/data/flask_session', exist_ok=True)
+else:
+    os.makedirs(os.path.join(BASE_DIR, 'flask_session'), exist_ok=True)
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
 app = Flask(__name__)
