@@ -1,16 +1,147 @@
-.user-avatar {
-    width: 40px;
+/* Estilos para la navegación */
+
+.navbar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand img {
     height: 40px;
-    background-color: #4e73df;
-    color: white;
+    margin-right: 10px;
+}
+
+.bg-guanta {
+    background-color: #e85d45 !important;
+}
+
+.user-info {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+}
+
+.user-info .user-name {
+    margin-right: 10px;
+}
+
+.user-info .user-role {
+    background-color: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+/* Estilos para el dashboard */
+.card-stats {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    margin-bottom: 20px;
+}
+
+.card-stats:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.card-body .card-text {
+    font-size: 2rem;
     font-weight: bold;
 }
 
-.navbar {
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df, #224abe);
+    color: white;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #1cc88a, #13855c);
+    color: white;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(45deg, #36b9cc, #258391);
+    color: white;
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(45deg, #f6c23e, #dda20a);
+    color: white;
+}
+
+.icon-circle {
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Estilos para tablas */
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.btn-group {
+    white-space: nowrap;
+}
+
+/* Estilos para formularios */
+.form-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 5px;
+}
+
+/* Estilos para badges */
+.badge-remitido {
+    background-color: #17a2b8 !important;
+}
+
+/* Estilos para botones */
+.btn-action {
+    margin: 0 3px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para modales */
+.modal-xl {
+    max-width: 95%;
+}
+
+/* Estilos para alertas */
+.alert {
+    margin-bottom: 15px;
+}
+
+/* Estilos para el dashboard */
+.container-fluid {
+    padding: 0 15px;
 }

@@ -1,11 +1,7 @@
 $(document).ready(function() {
-    // Initialize Bootstrap 5 modal
-    var personaModal = new bootstrap.Modal(document.getElementById('personaModal'));
-    
     var tablaPersonas = $('#tablaPersonas').DataTable({
-        "ajax": {
-            "url": "../api/ciudadano.php?accion=listar",
-            "dataSrc": ""
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
         },
         "columns": [
             {"data": "id"},
@@ -20,10 +16,7 @@ $(document).ready(function() {
                     "<button class='btn btn-danger btn-sm btn-action btnBorrar'><i class='fas fa-trash-alt'></i></button>" +
                     "</div>"
             }
-        ],
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
-        }
+        ]
     });
     
     // Botón Nuevo
@@ -31,12 +24,11 @@ $(document).ready(function() {
         $("#formPersona").trigger("reset");
         $("#id").val("");
         $(".modal-title").text("Nueva Persona");
-        personaModal.show();
+        $('#personaModal').modal('show');
     });
     
     // Botón Guardar
     $("#btnGuardar").click(function() {
-        // Validar formulario
         if (!$("#formPersona")[0].checkValidity()) {
             $("#formPersona")[0].reportValidity();
             return;
@@ -49,30 +41,20 @@ $(document).ready(function() {
         formData.append("accion", accion);
         
         $.ajax({
-            url: "../api/ciudadano.php",
+            url: "/ciudadano",
             type: "POST",
             data: formData,
             contentType: false,
             processData: false,
-            dataType: "json", // Expect JSON response
-            success: function(resultado) {
-                if (resultado.status === "success") {
-                    personaModal.hide();
-                    Swal.fire({
-                        title: "¡Éxito!",
-                        text: resultado.message,
-                        icon: "success",
-                        confirmButtonText: "Aceptar"
-                    });
-                    tablaPersonas.ajax.reload();
-                } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: resultado.message,
-                        icon: "error",
-                        confirmButtonText: "Aceptar"
-                    });
-                }
+            success: function() {
+                $('#personaModal').modal('hide');
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "Ciudadano guardado correctamente",
+                    icon: "success",
+                    confirmButtonText: "Aceptar"
+                });
+                tablaPersonas.ajax.reload();
             },
             error: function(xhr, status, error) {
                 console.error("Error en la solicitud:", error);
@@ -98,7 +80,7 @@ $(document).ready(function() {
         $("#comuna").val(data.comuna);
         
         $(".modal-title").text("Editar Persona");
-        personaModal.show();
+        $('#personaModal').modal('show');
     });
     
     // Botón Borrar
@@ -117,30 +99,16 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "../api/ciudadano.php",
-                    type: "POST",
-                    data: {
-                        id: data.id,
-                        accion: "eliminar"
-                    },
-                    dataType: "json", // Expect JSON response
-                    success: function(resultado) {
-                        if (resultado.status === "success") {
-                            Swal.fire({
-                                title: "¡Eliminado!",
-                                text: resultado.message,
-                                icon: "success",
-                                confirmButtonText: "Aceptar"
-                            });
-                            tablaPersonas.ajax.reload();
-                        } else {
-                            Swal.fire({
-                                title: "Error",
-                                text: resultado.message,
-                                icon: "error",
-                                confirmButtonText: "Aceptar"
-                            });
-                        }
+                    url: "/ciudadano/eliminar/" + data.id,
+                    type: "GET",
+                    success: function() {
+                        Swal.fire({
+                            title: "¡Eliminado!",
+                            text: "Ciudadano eliminado correctamente",
+                            icon: "success",
+                            confirmButtonText: "Aceptar"
+                        });
+                        tablaPersonas.ajax.reload();
                     },
                     error: function(xhr, status, error) {
                         console.error("Error en la solicitud:", error);

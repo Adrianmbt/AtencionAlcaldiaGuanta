@@ -22,11 +22,9 @@ $(document).ready(function() {
         const username = $('#username').val();
         const password = $('#password').val();
         
-        // Deshabilitar el botón durante la petición
         const submitButton = $(this).find('button[type="submit"]');
         submitButton.prop('disabled', true);
         
-        // Realizar la petición AJAX para el inicio de sesión
         $.ajax({
             url: '/auth/login',
             type: 'POST',
@@ -37,7 +35,8 @@ $(document).ready(function() {
             success: function(response) {
                 window.location.href = '/dashboard';
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                console.error('Error en login:', error);
                 Swal.fire({
                     title: 'Error',
                     text: 'Usuario o contraseña incorrectos',

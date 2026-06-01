@@ -5,16 +5,16 @@ class Ayuda:
                  valor_inversion_social=None, fecha_solicitud=None, fecha_entrega=None, 
                  descayuda=None, estado=None, remitido=None):
         self.id = id
-        self.idP = idP  # ID de la persona
-        self.idUs = idUs  # ID del usuario
-        self.motivo_caso = motivo_caso  # Motivo del caso (nuevo campo)
-        self.especificacion_caso = especificacion_caso  # Especificación del caso (antes tpayuda)
-        self.valor_inversion_social = valor_inversion_social  # Valor de inversión social (antes valayuda)
+        self.idP = idP
+        self.idUs = idUs
+        self.motivo_caso = motivo_caso
+        self.especificacion_caso = especificacion_caso
+        self.valor_inversion_social = valor_inversion_social
         self.fecha_solicitud = fecha_solicitud
         self.fecha_entrega = fecha_entrega
-        self.descayuda = descayuda  # Descripción de la ayuda
+        self.descayuda = descayuda
         self.estado = estado
-        self.remitido = remitido  # Nuevo campo para control de remisión
+        self.remitido = remitido
     
     @staticmethod
     def get_all(cursor):
@@ -29,7 +29,7 @@ class Ayuda:
                 id=row['id'],
                 idP=row['idP'],
                 idUs=row['idUs'],
-                motivo_caso=row.get('motivo_caso', row.get('tpayuda', '')),  # Compatibilidad
+                motivo_caso=row.get('motivo_caso', row.get('tpayuda', '')),
                 especificacion_caso=row.get('especificacion_caso', row.get('tpayuda', '')),
                 valor_inversion_social=row.get('valor_inversion_social', row.get('valayuda', 0)),
                 fecha_solicitud=row['FechaSolicitud'],
@@ -46,7 +46,7 @@ class Ayuda:
             SELECT a.*, p.nombre as nombre_persona, p.cedula as cedula_persona 
             FROM ayudas a 
             JOIN persona p ON a.idP = p.id 
-            WHERE a.id = %s
+            WHERE a.id = ?
         """, (ayuda_id,))
         result = cursor.fetchone()
         if result:
@@ -71,7 +71,7 @@ class Ayuda:
             SELECT a.*, p.nombre as nombre_persona, p.cedula as cedula_persona 
             FROM ayudas a 
             JOIN persona p ON a.idP = p.id 
-            WHERE a.idP = %s
+            WHERE a.idP = ?
         """, (persona_id,))
         results = cursor.fetchall()
         return [

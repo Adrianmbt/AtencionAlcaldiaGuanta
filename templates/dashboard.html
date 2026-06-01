@@ -58,7 +58,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- Reemplazar la sección de la navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-guanta">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -91,7 +90,6 @@
 <div class="container-fluid py-4">
     <h1 class="mb-4">Panel de Control</h1>
     
-    <!-- Tarjetas de estadísticas -->
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card card-stats bg-gradient-primary">
@@ -163,9 +161,7 @@
         </div>
     </div>
     
-    <!-- Gráficos -->
     <div class="row mt-4">
-        <!-- Mapa de Necesidades -->
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -179,7 +175,6 @@
             </div>
         </div>
         
-        <!-- Histórico de Necesidades -->
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -195,7 +190,6 @@
     </div>
     
     <div class="row">
-        <!-- Casos por Motivo -->
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -209,7 +203,6 @@
             </div>
         </div>
         
-        <!-- Casos Remitidos -->
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -233,13 +226,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Colores para gráficos
     const colors = [
         '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', 
         '#5a5c69', '#6610f2', '#6f42c1', '#fd7e14', '#20c997'
     ];
     
-    // Mapa de Necesidades por Comuna
     const mapaNecesidadesCtx = document.getElementById('mapaNecesidadesChart').getContext('2d');
     const mapaNecesidadesData = {
         labels: [{% for item in stats.mapa_necesidades %}'{{ item.comuna }}',{% endfor %}],
@@ -272,7 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Histórico de Necesidades
     const historicoNecesidadesCtx = document.getElementById('historicoNecesidadesChart').getContext('2d');
     const historicoNecesidadesData = {
         labels: [{% for item in stats.historico_necesidades %}'{{ item.mes }}',{% endfor %}],
@@ -305,7 +295,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Distribución de Casos por Motivo
     const motivosCasosCtx = document.getElementById('motivosCasosChart').getContext('2d');
     const motivosCasosData = {
         labels: [{% for item in stats.casos_por_motivo %}'{{ item.motivo }}',{% endfor %}],
@@ -329,7 +318,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Casos Remitidos por Entidad
     const casosRemitidosCtx = document.getElementById('casosRemitidosChart').getContext('2d');
     const casosRemitidosData = {
         labels: [{% for item in stats.entidades_remision %}'{{ item.entidad }}',{% endfor %}],

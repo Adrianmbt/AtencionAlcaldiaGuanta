@@ -4,6 +4,7 @@
 
 {% block custom_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/navstyles.css') }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 <style>
     .table-section {
         background-color: white;
@@ -46,7 +47,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- Reemplazar la sección de la navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-guanta">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -79,7 +79,18 @@
 <div class="container mt-5">
     <h1 class="mb-4">Gestión de Casos Ciudadanos</h1>
     
-    <!-- Botón para abrir modal de agregar caso -->
+    {% if success_message %}
+    <div class="alert alert-success" role="alert">
+        {{ success_message }}
+    </div>
+    {% endif %}
+    
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+
     <div class="mb-5">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#casoModal">
             <i class="fas fa-plus"></i> Agregar Nuevo Caso
@@ -98,7 +109,6 @@
                     <form method="POST" action="{{ url_for('casos') }}" id="formCaso">
                         <input type="hidden" id="casoId" name="id" value="">
                         
-                        <!-- Sección: Información del Ciudadano -->
                         <div class="form-section">
                             <h6 class="section-title"><i class="fas fa-user"></i> Información del Ciudadano</h6>
                             <div class="row">
@@ -119,7 +129,6 @@
                             </div>
                         </div>
 
-                        <!-- Sección: Clasificación del Caso -->
                         <div class="form-section">
                             <h6 class="section-title"><i class="fas fa-clipboard-list"></i> Clasificación del Caso</h6>
                             <div class="row mb-3">
@@ -142,7 +151,6 @@
                             </div>
                         </div>
 
-                        <!-- Sección: Detalles Económicos y Estado -->
                         <div class="form-section">
                             <h6 class="section-title"><i class="fas fa-dollar-sign"></i> Inversión Social y Estado</h6>
                             <div class="row mb-3">
@@ -168,7 +176,6 @@
                             </div>
                         </div>
 
-                        <!-- Sección: Descripción del Caso -->
                         <div class="form-section">
                             <h6 class="section-title"><i class="fas fa-file-alt"></i> Descripción del Caso</h6>
                             <div class="mb-3">
@@ -234,7 +241,6 @@
         </div>
     </div>
 
-    <!-- Listado de casos -->
     <div class="table-section">
         <h2 class="mb-3">Listado de Casos</h2>
         <div class="table-responsive">
@@ -279,34 +285,22 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-primary btn-action editar-caso" 
-                                        data-id="{{ caso.id }}" 
-                                        data-idp="{{ caso.idP }}" 
-                                        data-motivo="{{ caso.motivo_caso or caso.tpayuda }}"
-                                        data-especificacion="{{ caso.especificacion_caso or caso.tpayuda }}" 
-                                        data-valor="{{ caso.valor_inversion_social or caso.valayuda }}" 
-                                        data-estado="{{ caso.estado }}" 
-                                        data-descayuda="{{ caso.descayuda }}" 
-                                        title="Editar caso">
+                                <a href="{{ url_for('casos', id=caso.id) }}" class="btn btn-primary btn-action" title="Editar caso">
                                     <i class="fas fa-edit"></i>
-                                </button>
+                                </a>
                                 <a href="{{ url_for('eliminar_caso', id=caso.id) }}" 
                                    class="btn btn-danger btn-action" 
                                    onclick="return confirm('¿Está seguro de eliminar este caso?');" 
                                    title="Eliminar caso">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
-                                <button type="button" class="btn btn-info btn-action generar-pdf" 
-                                        data-id="{{ caso.id }}" 
-                                        title="Generar reporte PDF">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button>
                                 {% if caso.estado != 'Aprobado' and caso.estado != 'Entregado' %}
-                                <button type="button" class="btn btn-success btn-action aprobar-recurso" 
-                                        data-id="{{ caso.id }}" 
-                                        title="Aprobar recursos">
+                                <a href="{{ url_for('aprobar_caso', id=caso.id) }}" 
+                                   class="btn btn-success btn-action" 
+                                   onclick="return confirm('¿Está seguro de aprobar los recursos para este caso?');"
+                                   title="Aprobar recursos">
                                     <i class="fas fa-check-circle"></i>
-                                </button>
+                                </a>
                                 {% endif %}
                                 {% if caso.remitido != 'Sí' %}
                                 <button type="button" class="btn btn-warning btn-action remitir-caso" 
@@ -328,59 +322,33 @@
 {% endblock %}
 
 {% block custom_js %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 <script src="{{ url_for('static', filename='js/casos.js') }}"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Mostrar modal automáticamente si hay un ciudadano seleccionado
-    const urlParams = new URLSearchParams(window.location.search);
-    const showModal = urlParams.get('show_modal');
-    const successMessage = urlParams.get('success');
-    
-    if (successMessage) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Éxito!',
-            text: decodeURIComponent(successMessage),
-            timer: 3000,
-            showConfirmButton: false
-        });
-    }
-    
-    if (showModal === 'true') {
-        const modal = new bootstrap.Modal(document.getElementById('casoModal'));
-        modal.show();
-    }
-
-    // Manejar edición de casos
-    document.querySelectorAll('.editar-caso').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const idp = this.dataset.idp;
-            const motivo = this.dataset.motivo;
-            const especificacion = this.dataset.especificacion;
-            const valor = this.dataset.valor;
-            const estado = this.dataset.estado;
-            const descayuda = this.dataset.descayuda;
-            
-            document.getElementById('casoId').value = id;
-            document.getElementById('idP').value = idp;
-            document.getElementById('motivo_caso').value = motivo;
-            document.getElementById('especificacion_caso').value = especificacion;
-            document.getElementById('valor_inversion_social').value = valor;
-            document.getElementById('estado').value = estado;
-            document.getElementById('descayuda').value = descayuda;
-            
-            document.getElementById('casoModalLabel').textContent = 'Editar Caso';
-            document.getElementById('btnGuardarCaso').innerHTML = '<i class="fas fa-save"></i> Actualizar Caso';
-            
-            const modal = new bootstrap.Modal(document.getElementById('casoModal'));
-            modal.show();
-        });
+    {% if success_message and success_message != 'None' %}
+    Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: "{{ success_message }}",
+        timer: 3000,
+        showConfirmButton: false
     });
+    {% endif %}
 
-    // Manejar remisión de casos
+    {% if error_message and error_message != 'None' %}
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: "{{ error_message }}",
+        timer: 4000,
+        showConfirmButton: true
+    });
+    {% endif %}
+
+
     document.querySelectorAll('.remitir-caso').forEach(button => {
         button.addEventListener('click', function() {
             const id = this.dataset.id;
@@ -391,7 +359,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Mostrar/ocultar campo "Otra Entidad"
     document.getElementById('entidad_remision').addEventListener('change', function() {
         const otraEntidadDiv = document.getElementById('otraEntidadDiv');
         if (this.value === 'Otra Entidad') {
@@ -403,61 +370,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Limpiar formulario al cerrar modal
     document.getElementById('casoModal').addEventListener('hidden.bs.modal', function() {
         document.getElementById('formCaso').reset();
         document.getElementById('casoId').value = '';
         document.getElementById('casoModalLabel').textContent = 'Agregar Nuevo Caso';
         document.getElementById('btnGuardarCaso').innerHTML = '<i class="fas fa-save"></i> Registrar Caso';
-    });
-
-    // Manejar aprobación de recursos
-    document.querySelectorAll('.aprobar-recurso').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            
-            Swal.fire({
-                title: '¿Aprobar recursos?',
-                text: '¿Está seguro de aprobar los recursos para este caso?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sí, aprobar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `/aprobar_caso/${id}`;
-                }
-            });
-        });
-    });
-
-    // Manejar generación de PDF
-    document.querySelectorAll('.generar-pdf').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            
-            Swal.fire({
-                title: 'Generando PDF...',
-                text: 'Por favor espere mientras se genera el reporte',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            
-            // Simular generación de PDF (aquí iría la lógica real)
-            setTimeout(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'PDF Generado',
-                    text: 'El reporte se ha generado exitosamente',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            }, 2000);
-        });
     });
 });
 </script>

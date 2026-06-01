@@ -623,3 +623,96 @@
 2025-10-01 11:59:03,926 - INFO - 127.0.0.1 - - [01/Oct/2025 11:59:03] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
 2025-10-01 11:59:03,928 - INFO - 127.0.0.1 - - [01/Oct/2025 11:59:03] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
 2025-10-01 11:59:04,163 - INFO - 127.0.0.1 - - [01/Oct/2025 11:59:04] "[36mGET /static/js/navegacion.js HTTP/1.1[0m" 304 -
+2026-06-01 12:12:32,078 - INFO -  * Restarting with stat
+2026-06-01 12:12:32,490 - WARNING -  * Debugger is active!
+2026-06-01 12:12:32,497 - INFO -  * Debugger PIN: 120-375-060
+2026-06-01 12:12:32,532 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2026-06-01 12:13:02,355 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:02] "[32mGET / HTTP/1.1[0m" 302 -
+2026-06-01 12:13:02,661 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:02] "GET /login HTTP/1.1" 200 -
+2026-06-01 12:13:02,767 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:02] "GET /static/css/styles.css HTTP/1.1" 200 -
+2026-06-01 12:13:03,018 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:03] "GET /static/img/logo.webp HTTP/1.1" 200 -
+2026-06-01 12:13:03,435 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:03] "GET /static/js/login.js HTTP/1.1" 200 -
+2026-06-01 12:13:03,650 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:03] "GET /static/img/guanta.webp HTTP/1.1" 200 -
+2026-06-01 12:13:03,779 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:03] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-06-01 12:13:07,818 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:07] "[32mPOST /auth/login HTTP/1.1[0m" 302 -
+2026-06-01 12:13:08,096 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "GET /dashboard HTTP/1.1" 200 -
+2026-06-01 12:13:08,151 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "GET /dashboard HTTP/1.1" 200 -
+2026-06-01 12:13:08,446 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "GET /static/css/navstyles.css HTTP/1.1" 200 -
+2026-06-01 12:13:08,525 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:08,526 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:13:08,551 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "GET /static/js/navegacion.js HTTP/1.1" 200 -
+2026-06-01 12:13:08,551 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:08] "GET /static/js/dashboard.js HTTP/1.1" 200 -
+2026-06-01 12:13:13,274 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:13] "GET /ciudadano HTTP/1.1" 200 -
+2026-06-01 12:13:13,672 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:13] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:13:13,672 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:13] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:13,676 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:13] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:13,680 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:13] "GET /static/js/ciudadano.js HTTP/1.1" 200 -
+2026-06-01 12:13:13,683 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:13] "[36mGET /static/js/navegacion.js HTTP/1.1[0m" 304 -
+2026-06-01 12:13:15,395 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:15] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:13:15,806 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:15] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:15,810 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:15] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:15,810 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:15] "GET /static/js/casos.js HTTP/1.1" 200 -
+2026-06-01 12:13:15,812 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:15] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:13:22,414 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:22] "GET /ciudadano HTTP/1.1" 200 -
+2026-06-01 12:13:22,825 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:22] "[36mGET /static/js/ciudadano.js HTTP/1.1[0m" 304 -
+2026-06-01 12:13:22,827 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:22] "[36mGET /static/js/navegacion.js HTTP/1.1[0m" 304 -
+2026-06-01 12:13:22,836 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:22] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:22,841 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:22] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:22,845 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:22] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:13:23,257 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:23] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:13:23,624 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:23] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:13:23,626 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:23] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:13:23,628 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:23] "[36mGET /static/js/casos.js HTTP/1.1[0m" 304 -
+2026-06-01 12:13:23,630 - INFO - 127.0.0.1 - - [01/Jun/2026 12:13:23] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:15:26,410 - INFO - 127.0.0.1 - - [01/Jun/2026 12:15:26] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:15:26,651 - INFO - 127.0.0.1 - - [01/Jun/2026 12:15:26] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:15:26,794 - INFO - 127.0.0.1 - - [01/Jun/2026 12:15:26] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:15:26,798 - INFO - 127.0.0.1 - - [01/Jun/2026 12:15:26] "[36mGET /static/js/casos.js HTTP/1.1[0m" 304 -
+2026-06-01 12:15:26,807 - INFO - 127.0.0.1 - - [01/Jun/2026 12:15:26] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:19:25,396 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:25] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:19:25,656 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:25] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:19:25,753 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:25] "GET /static/js/casos.js HTTP/1.1" 200 -
+2026-06-01 12:19:25,754 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:25] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:19:25,757 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:25] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:19:32,867 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:32] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:19:33,189 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:33] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:19:33,218 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:33] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-06-01 12:19:34,472 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:34] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:19:34,777 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:34] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:19:34,851 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:34] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:19:34,853 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:34] "[36mGET /static/js/casos.js HTTP/1.1[0m" 304 -
+2026-06-01 12:19:34,856 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:34] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:19:34,858 - INFO - 127.0.0.1 - - [01/Jun/2026 12:19:34] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-06-01 12:28:48,427 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:48] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:28:48,678 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:48] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:28:48,814 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:48] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:28:48,815 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:48] "[36mGET /static/js/casos.js HTTP/1.1[0m" 304 -
+2026-06-01 12:28:48,817 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:48] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:28:48,832 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:48] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-06-01 12:28:56,367 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:56] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:28:56,759 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:56] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-06-01 12:28:56,760 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:56] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:28:56,761 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:56] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:28:56,763 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:56] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:28:56,763 - INFO - 127.0.0.1 - - [01/Jun/2026 12:28:56] "[36mGET /static/js/casos.js HTTP/1.1[0m" 304 -
+2026-06-01 12:37:10,311 - INFO -  * Restarting with stat
+2026-06-01 12:37:10,736 - WARNING -  * Debugger is active!
+2026-06-01 12:37:10,744 - INFO -  * Debugger PIN: 120-375-060
+2026-06-01 12:37:10,778 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2026-06-01 12:37:22,240 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:22] "GET /casos HTTP/1.1" 200 -
+2026-06-01 12:37:22,563 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:22] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:37:22,608 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:22] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:37:22,612 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:22] "[36mGET /static/js/casos.js HTTP/1.1[0m" 304 -
+2026-06-01 12:37:22,614 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:22] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:37:25,931 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:25] "GET /ciudadano HTTP/1.1" 200 -
+2026-06-01 12:37:26,325 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:26] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:37:26,329 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:26] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:37:26,331 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:26] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:37:26,334 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:26] "[36mGET /static/js/navegacion.js HTTP/1.1[0m" 304 -
+2026-06-01 12:37:26,336 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:26] "[36mGET /static/js/ciudadano.js HTTP/1.1[0m" 304 -
+2026-06-01 12:37:26,877 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:26] "GET /dashboard HTTP/1.1" 200 -
+2026-06-01 12:37:27,239 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:27] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:37:27,296 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:27] "[36mGET /static/css/navstyles.css HTTP/1.1[0m" 304 -
+2026-06-01 12:37:27,297 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:27] "[36mGET /static/js/navegacion.js HTTP/1.1[0m" 304 -
+2026-06-01 12:37:27,300 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:27] "[36mGET /static/img/logo.webp HTTP/1.1[0m" 304 -
+2026-06-01 12:37:27,306 - INFO - 127.0.0.1 - - [01/Jun/2026 12:37:27] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -

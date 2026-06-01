@@ -24,7 +24,7 @@ class Persona:
     
     @staticmethod
     def get_by_id(cursor, persona_id):
-        cursor.execute("SELECT * FROM persona WHERE id = %s", (persona_id,))
+        cursor.execute("SELECT * FROM persona WHERE id = ?", (persona_id,))
         result = cursor.fetchone()
         if result:
             return Persona(
@@ -39,7 +39,7 @@ class Persona:
     
     @staticmethod
     def get_by_cedula(cursor, cedula):
-        cursor.execute("SELECT * FROM persona WHERE cedula = %s", (cedula,))
+        cursor.execute("SELECT * FROM persona WHERE cedula = ?", (cedula,))
         result = cursor.fetchone()
         if result:
             return Persona(

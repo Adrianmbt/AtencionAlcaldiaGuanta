@@ -9,7 +9,7 @@ class Usuario:
     
     @staticmethod
     def get_by_id(cursor, user_id):
-        cursor.execute("SELECT * FROM usuarios WHERE id = %s", (user_id,))
+        cursor.execute("SELECT * FROM usuarios WHERE id = ?", (user_id,))
         result = cursor.fetchone()
         if result:
             return Usuario(
@@ -24,7 +24,7 @@ class Usuario:
     
     @staticmethod
     def get_by_username(cursor, username):
-        cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (username,))
+        cursor.execute("SELECT * FROM usuarios WHERE usuario = ?", (username,))
         result = cursor.fetchone()
         if result:
             return Usuario(

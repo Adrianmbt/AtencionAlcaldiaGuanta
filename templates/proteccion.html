@@ -1,32 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Protección - Registro de Ayudas{% endblock %}
+{% block title %}Protección de Datos{% endblock %}
 
 {% block custom_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/navstyles.css') }}">
 <style>
-    .form-section {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 30px;
-    }
-    .table-section {
+    .protection-section {
         background-color: white;
-        padding: 20px;
+        padding: 30px;
         border-radius: 10px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
     }
-    .btn-action {
-        margin: 0 5px;
+    .protection-section h2 {
+        color: #0d6efd;
+        margin-bottom: 20px;
+    }
+    .protection-section ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .protection-section ul li {
+        padding: 10px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .protection-section ul li:last-child {
+        border-bottom: none;
+    }
+    .protection-section ul li::before {
+        content: "✓";
+        color: #28a745;
+        font-weight: bold;
+        margin-right: 10px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-guanta">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">ALC Sistema</a>
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='img/logo.webp') }}" alt="Logo Guanta">
+            Alcaldía de Guanta
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,7 +55,7 @@
                     <a class="nav-link" href="{{ url_for('ciudadano') }}">Ciudadanos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('proteccion') }}">Protección</a>
+                    <a class="nav-link" href="{{ url_for('casos') }}">Casos</a>
                 </li>
             </ul>
             <div class="d-flex">
@@ -51,187 +67,54 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="mb-4">Registro de Ayudas</h1>
+    <h1 class="text-center mb-5">Protección de Datos Personales</h1>
     
-    <!-- Mensajes de éxito o error -->
-    {% if success_message %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ success_message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-    
-    {% if error_message %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ error_message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-
-    <!-- Botón para abrir modal de agregar ayuda -->
-    <div class="mb-5">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ayudaModal">
-            <i class="fas fa-plus"></i> Agregar Nueva Ayuda
-        </button>
-    </div>
-
-    <!-- Modal para agregar/editar ayuda -->
-    <div class="modal fade" id="ayudaModal" tabindex="-1" aria-labelledby="ayudaModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ayudaModalLabel">Agregar Nueva Ayuda</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="{{ url_for('proteccion') }}">
-                        <input type="hidden" id="ayudaId" name="id" value="">
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="idP" class="form-label">Ciudadano</label>
-                                <select class="form-select" id="idP" name="idP" required>
-                                    <option value="">Seleccione un ciudadano</option>
-                                    {% for ciudadano in ciudadanos %}
-                                    <option value="{{ ciudadano.id }}">{{ ciudadano.nombre }} - {{ ciudadano.cedula }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="tpayuda" class="form-label">Tipo de Ayuda</label>
-                                <input type="text" class="form-control" id="tpayuda" name="tpayuda" required>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="valayuda" class="form-label">Valor de la Ayuda</label>
-                                <input type="number" step="0.01" class="form-control" id="valayuda" name="valayuda" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="estado" class="form-label">Estado</label>
-                                <select class="form-select" id="estado" name="estado" required>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Entregado">Entregado</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="descayuda" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descayuda" name="descayuda" rows="3" required></textarea>
-                        </div>
-                        
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" id="btnGuardarAyuda">Registrar Ayuda</button>
-                        </div>
-                    </form>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="protection-section">
+                <h2><i class="fas fa-shield-alt"></i> Política de Privacidad</h2>
+                <p>La Alcaldía de Guanta se compromete a proteger la privacidad y los datos personales de todos los ciudadanos que utilizan nuestro sistema de atención.</p>
+                
+                <h3>¿Qué datos recopilamos?</h3>
+                <ul>
+                    <li>Datos de identificación (nombre, cédula)</li>
+                    <li>Datos de contacto (dirección, teléfono)</li>
+                    <li>Datos de casos y necesidades</li>
+                    <li>Información de sesiones</li>
+                </ul>
+                
+                <h3>¿Cómo protegemos sus datos?</h3>
+                <ul>
+                    <li>Encriptación de datos sensibles</li>
+                    <li>Acceso restringido por roles</li>
+                    <li>Registros de auditoría</li>
+                    <li>Copia de seguridad diaria</li>
+                </ul>
+                
+                <h3>Derechos del ciudadano</h3>
+                <ul>
+                    <li>Derecho a acceder a sus datos</li>
+                    <li>Derecho a rectificar datos incorrectos</li>
+                    <li>Derecho a solicitar la eliminación de datos</li>
+                    <li>Derecho a la portabilidad de datos</li>
+                </ul>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Nota:</strong> Para ejercer sus derechos, comuníquese con la Oficina de Transparencia y Acceso a la Información Pública.
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Listado de ayudas -->
-    <div class="table-section">
-        <h2 class="mb-3">Listado de Ayudas</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Ciudadano</th>
-                        <th>Cédula</th>
-                        <th>Tipo de Ayuda</th>
-                        <th>Valor</th>
-                        <th>Fecha Solicitud</th>
-                        <th>Fecha Entrega</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ayuda in ayudas %}
-                    <tr>
-                        <td>{{ ayuda.id }}</td>
-                        <td>{{ ayuda.nombre_persona }}</td>
-                        <td>{{ ayuda.cedula_persona }}</td>
-                        <td>{{ ayuda.tpayuda }}</td>
-                        <td>{{ ayuda.valayuda }}</td>
-                        <td>{{ ayuda.FechaSolicitud }}</td>
-                        <td>{{ ayuda.FechaEntrega if ayuda.FechaEntrega else 'N/A' }}</td>
-                        <td>
-                            <span class="badge {% if ayuda.estado == 'Entregado' %}bg-success{% else %}bg-warning{% endif %}">
-                                {{ ayuda.estado }}
-                            </span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-primary btn-sm btn-action editar-ayuda" 
-                                    data-id="{{ ayuda.id }}" 
-                                    data-idp="{{ ayuda.idP }}" 
-                                    data-tpayuda="{{ ayuda.tpayuda }}" 
-                                    data-valayuda="{{ ayuda.valayuda }}" 
-                                    data-estado="{{ ayuda.estado }}" 
-                                    data-descayuda="{{ ayuda.descayuda }}">
-                                Editar
-                            </button>
-                            <a href="{{ url_for('eliminar_ayuda', id=ayuda.id) }}" 
-                               class="btn btn-danger btn-sm btn-action" 
-                               onclick="return confirm('¿Está seguro de eliminar esta ayuda?');">
-                                Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            
+            <div class="text-center">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
 {% block custom_js %}
 <script src="{{ url_for('static', filename='js/proteccion.js') }}"></script>
-<script>
-    // Script para manejar la edición de ayudas en el modal
-    document.addEventListener('DOMContentLoaded', function() {
-        // Evento para los botones de editar
-        document.querySelectorAll('.editar-ayuda').forEach(button => {
-            button.addEventListener('click', function() {
-                // Obtener los datos de la ayuda
-                const id = this.getAttribute('data-id');
-                const idP = this.getAttribute('data-idp');
-                const tpayuda = this.getAttribute('data-tpayuda');
-                const valayuda = this.getAttribute('data-valayuda');
-                const estado = this.getAttribute('data-estado');
-                const descayuda = this.getAttribute('data-descayuda');
-                
-                // Llenar el formulario con los datos
-                document.getElementById('ayudaId').value = id;
-                document.getElementById('idP').value = idP;
-                document.getElementById('tpayuda').value = tpayuda;
-                document.getElementById('valayuda').value = valayuda;
-                document.getElementById('estado').value = estado;
-                document.getElementById('descayuda').value = descayuda;
-                
-                // Cambiar el título y texto del botón del modal
-                document.getElementById('ayudaModalLabel').textContent = 'Editar Ayuda';
-                document.getElementById('btnGuardarAyuda').textContent = 'Actualizar Ayuda';
-                
-                // Mostrar el modal
-                const modal = new bootstrap.Modal(document.getElementById('ayudaModal'));
-                modal.show();
-            });
-        });
-        
-        // Resetear el formulario y el título del modal cuando se cierra
-        document.getElementById('ayudaModal').addEventListener('hidden.bs.modal', function() {
-            const form = this.querySelector('form');
-            form.reset();
-            document.getElementById('ayudaId').value = '';
-            document.getElementById('ayudaModalLabel').textContent = 'Agregar Nueva Ayuda';
-            document.getElementById('btnGuardarAyuda').textContent = 'Registrar Ayuda';
-        });
-    });
-</script>
 {% endblock %}
 {% endblock %}
