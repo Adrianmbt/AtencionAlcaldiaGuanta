@@ -1,4 +1,5 @@
 from flask import Flask, session, redirect, url_for, request, render_template, jsonify
+from flask_session import Session
 from config import Config
 from models.usuario import Usuario
 from models.persona import Persona
@@ -22,6 +23,11 @@ app.config.from_object(Config)
 # Configurar sesiones para producción en Render (sin sistema de archivos)
 if os.environ.get('RENDER'):
     app.config['SESSION_TYPE'] = 'signed_cookie'
+else:
+    app.config['SESSION_TYPE'] = 'filesystem'
+
+# Inicializar Flask-Session
+Session(app)
 
 # Configurar logging: en producción (Render) usa stdout; en local, archivo
 if os.environ.get('RENDER'):
